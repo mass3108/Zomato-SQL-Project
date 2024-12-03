@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Project Title**:Zomato Sales Analysis  
+**Project Title**: Zomato Sales Analysis  
 **Level**: Advanced  
 **Database**: `SQL Projects`
 
@@ -43,7 +43,7 @@ FROM deliveries
 
 
 **Q1. Write a query to find the top 5 most frequently ordered dishes by customer called "Arjun Mehta" in the last 1 year**:
-```sql
+
 SELECT customer_name, order_item, total_cnt
 FROM(
 SELECT customer_name,
@@ -58,9 +58,8 @@ AND order_date >= CURRENT_DATE - INTERVAL '1 Year'
 GROUP BY customer_name, order_item
 ORDER BY total_cnt DESC)
 WHERE rn <= 5
-```sql
 
-#--Q2. Identify the time slots during which the most orders are placed. based on 2-hour intervals.
+**Q2. Identify the time slots during which the most orders are placed. based on 2-hour intervals**:
 
 SELECT 
 CASE 
@@ -82,8 +81,8 @@ FROM orders
 GROUP BY time_slot
 ORDER BY total_orders DESC
 
-#--Q3. Find the average order value per customer who has placed more than 750 orders.
--- Return customer_name, and aov(average order value)
+**Q3. Find the average order value per customer who has placed more than 750 orders.
+Return customer_name, and aov(average order value)**:
 
 SELECT customer_name,
 ROUND(AVG(total_amount),2) AS aov
@@ -93,8 +92,8 @@ ON o.customer_id = c.customer_id
 GROUP BY c.customer_id
 HAVING COUNT(*) > 750
 
-#-- Q4. List the customers who have spent more than 100K in total on food orders.
--- return customer_name, and customer_id!
+**Q4. List the customers who have spent more than 100K in total on food orders.
+Return customer_name, and customer_id!**:
 
 SELECT customer_name,
 SUM(total_amount) AS total_amount
@@ -105,8 +104,8 @@ GROUP BY c.customer_id
 HAVING SUM(total_amount) > 100000
 ORDER BY total_amount DESC
 
-#-- Q5. Write a query to find orders that were placed but not delivered. 
--- Return each restaurant name, city and number of not delivered orders 
+**Q5. Write a query to find orders that were placed but not delivered. 
+Return each restaurant name, city and number of not delivered orders**:
 
 SELECT restaurant_name, city, 
 COUNT(order_id) AS total_orders
@@ -116,8 +115,8 @@ ON r.restaurant_id = o.restaurant_id
 WHERE order_status = 'Not Fulfilled'
 GROUP BY restaurant_name, city
 
-#--Q6. Rank restaurants by their total revenue from the last year, including their name, 
--- total revenue, and rank within their city.
+**Q6. Rank restaurants by their total revenue from the last year, including their name, 
+Total revenue, and rank within their city**:
 
 SELECT *
 FROM(
@@ -131,7 +130,7 @@ WHERE order_date >= CURRENT_DATE - INTERVAL '1 YEAR'
 GROUP BY restaurant_name, city)
 WHERE rank = 1
 
-#--Q7. Identify the most popular dish in each city based on the number of orders.
+**Q7. Identify the most popular dish in each city based on the number of orders**:
 
 SELECT *
 FROM(
@@ -144,7 +143,7 @@ ON r.restaurant_id = o.restaurant_id
 GROUP BY city, order_item)
 WHERE rn = 1
 
-#--Q8. Find customers who haven’t placed an order in 2024 but did in 2023.
+**Q8. Find customers who haven’t placed an order in 2024 but did in 2023**:
 
 SELECT DISTINCT customer_id
 FROM orders
@@ -153,8 +152,7 @@ AND customer_id NOT IN (SELECT DISTINCT customer_id
 					    FROM orders
                         WHERE EXTRACT(year from order_date) = 2024)
 						
-#-- Q9. Calculate and compare the order cancellation rate for each restaurant between the 
--- current year and the previous year.
+**Q9. Calculate and compare the order cancellation rate for each restaurant between the current year and the previous year**:
 
 WITH cancel_ratio_prev AS
 (SELECT restaurant_name,
@@ -187,7 +185,7 @@ FROM cancel_ratio_prev cp
 INNER JOIN cancel_ratio_current cc 
 ON cp.restaurant_name = cc.restaurant_name
 
-#--Q10. Determine each rider's average delivery time.
+**Q10. Determine each rider's average delivery time**:
 
 SELECT rider_name,
 AVG(EXTRACT(EPOCH from delivery_time))/60 AS average_delivery_time
@@ -197,8 +195,8 @@ ON r.rider_id = d.rider_id
 WHERE delivery_status = 'Delivered'
 GROUP BY rider_name
 
-#--Q11. Monthly Restaurant Growth Ratio: 
--- Calculate each restaurant's growth ratio based on the total number of delivered orders since its joining
+**Q11. Monthly Restaurant Growth Ratio: 
+Calculate each restaurant's growth ratio based on the total number of delivered orders since its joining**:
 
 WITH CTE AS
 (SELECT restaurant_id, 
@@ -216,11 +214,11 @@ SELECT restaurant_id, month, total_orders, prev_month_orders,
 CAST((total_orders-prev_month_orders) AS FLOAT)/ CAST(prev_month_orders AS FLOAT) * 100 AS growth_ratio
 FROM CTE
 
-#-- Q.12 Customer Segmentation: 
--- Customer Segmentation: Segment customers into 'Gold' or 'Silver' groups based on their total spending 
--- compared to the average order value (AOV). If a customer's total spending exceeds the AOV, 
--- label them as 'Gold'; otherwise, label them as 'Silver'. Write an SQL query to determine each segment's 
--- total number of orders and total revenue
+**Q.12 Customer Segmentation: 
+Customer Segmentation: Segment customers into 'Gold' or 'Silver' groups based on their total spending 
+compared to the average order value (AOV). If a customer's total spending exceeds the AOV, 
+label them as 'Gold'; otherwise, label them as 'Silver'. Write an SQL query to determine each segment's 
+total number of orders and total revenue**:
 
 SELECT category, 
 SUM(total_orders) AS total_orders,
@@ -239,8 +237,8 @@ ON c.customer_id = o.customer_id
 GROUP BY customer_name)
 GROUP BY 1
 
-#-- Q.13 Rider Monthly Earnings: 
--- Calculate each rider's total monthly earnings, assuming they earn 8% of the order amount.
+**Q.13 Rider Monthly Earnings: 
+Calculate each rider's total monthly earnings, assuming they earn 8% of the order amount**:
 
 SELECT rider_name, 
 EXTRACT(month from order_date) AS month,
@@ -253,12 +251,12 @@ ON d.order_id = o.order_id
 GROUP BY rider_name, month
 ORDER BY month
 
-#-- Q.14 Rider Ratings Analysis: 
--- Find the number of 5-star, 4-star, and 3-star ratings each rider has.
--- riders receive this rating based on delivery time.
--- If orders are delivered less than 15 minutes of order received time the rider get 5 star rating,
--- if they deliver 15 and 20 minute they get 4 star rating 
--- if they deliver after 20 minute they get 3 star rating.
+**Q.14 Rider Ratings Analysis: 
+Find the number of 5-star, 4-star, and 3-star ratings each rider has.
+riders receive this rating based on delivery time.
+If orders are delivered less than 15 minutes of order received time the rider get 5 star rating,
+if they deliver 15 and 20 minute they get 4 star rating 
+if they deliver after 20 minute they get 3 star rating**:
 
 SELECT rider_name, stars,
 COUNT(*) AS total_cnt
@@ -283,8 +281,8 @@ GROUP BY rider_name, stars
 ORDER BY stars DESC
 
 
-#-- Q.15 Order Frequency by Day: 
--- Analyze order frequency per day of the week and identify the peak day for each restaurant.
+**Q.15 Order Frequency by Day: 
+Analyze order frequency per day of the week and identify the peak day for each restaurant**:
 
 SELECT *
 FROM(
@@ -298,8 +296,8 @@ ON r.restaurant_id = o.restaurant_id
 GROUP BY 1, 2)
 WHERE rn = 1
 
-#-- Q.16 Customer Lifetime Value (CLV): 
--- Calculate the total revenue generated by each customer over all their orders.
+**Q.16 Customer Lifetime Value (CLV): 
+Calculate the total revenue generated by each customer over all their orders**:
 
 SELECT customer_name,
 SUM(total_amount) AS total_revenue
@@ -308,8 +306,8 @@ INNER JOIN orders o
 ON c.customer_id = o.customer_id
 GROUP BY customer_name
 
-#-- Q.17 Monthly Sales Trends: 
--- Identify sales trends by comparing each month's total sales to the previous month.
+**Q.17 Monthly Sales Trends: 
+Identify sales trends by comparing each month's total sales to the previous month**:
 
 SELECT 
 EXTRACT(year from order_date) AS year,
@@ -320,8 +318,8 @@ FROM orders
 GROUP BY 1, 2
 
 
-#-- Q.18 Rider Efficiency: 
--- Evaluate rider efficiency by determining average delivery times and identifying those with the lowest and highest averages.
+**Q.18 Rider Efficiency
+Evaluate rider efficiency by determining average delivery times and identifying those with the lowest and highest averages**:
 
 WITH CTE AS
 (SELECT rider_name,
@@ -347,8 +345,8 @@ MIN(avg) AS min_time,
 MAX(avg) AS max_time
 FROM avg_table
 
-#-- Q.19 Order Item Popularity: 
--- Track the popularity of specific order items over time and identify seasonal demand spikes.
+**Q.19 Order Item Popularity: 
+Track the popularity of specific order items over time and identify seasonal demand spikes**:
 
 SELECT season, order_item,
 COUNT(order_item) AS total_cnt
@@ -366,7 +364,7 @@ GROUP BY 1, 2
 ORDER BY 2, 3 DESC
 
 
-#-- Q.20 Rank each city based on the total revenue for last year 2023 
+**Q.20 Rank each city based on the total revenue for last year 2023**:
 
 SELECT city,
 SUM(total_amount) AS total_revenue,
@@ -377,4 +375,18 @@ ON r.restaurant_id = o.restaurant_id
 WHERE EXTRACT(year from order_date) = 2023
 GROUP BY 1
 
--- Thank You
+## Conclusion
+
+This project serves as a comprehensive introduction to SQL for data analysts, covering database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The findings from this project can help drive business decisions by understanding sales patterns, customer behavior, and product performance.
+
+
+
+## Author - Maasir Saad
+
+This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
+
+- **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/maasir-saad-ab3bb2142/)
+
+
+Thank You!
+
