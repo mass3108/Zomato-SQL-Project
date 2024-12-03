@@ -1,4 +1,31 @@
 # Zomato-SQL-Project
+
+## Project Overview
+
+**Project Title**:Zomato Sales Analysis  
+**Level**: Advanced  
+**Database**: `SQL Projects`
+
+This project is designed to demonstrate SQL skills and techniques typically used by data analysts to explore, clean, and analyze retail sales data. The project involves setting up a retail sales database, performing exploratory data analysis (EDA), and answering specific business questions through SQL queries. This project is ideal for those who are starting their journey in data analysis and want to build a solid foundation in SQL.
+
+## Objectives
+
+1. **Set up a retail sales database**: Create and populate a retail sales database with the provided sales data.
+2. **Data Cleaning**: Identify and remove any records with missing or null values.
+3. **Exploratory Data Analysis (EDA)**: Perform basic exploratory data analysis to understand the dataset.
+4. **Business Analysis**: Use SQL to answer specific business questions and derive insights from the sales data.
+
+## Project Structure
+
+### 1. Database Setup
+
+- **Database Creation**:
+- **Table Creation**
+
+--Analysis Report
+
+```sql
+
 SELECT * 
 FROM customers
 
@@ -15,10 +42,8 @@ SELECT *
 FROM deliveries
 
 
---Analysis Report
-
-#--Q1. Write a query to find the top 5 most frequently ordered dishes by customer called "Arjun Mehta" in the last 1 year.
-
+**Q1. Write a query to find the top 5 most frequently ordered dishes by customer called "Arjun Mehta" in the last 1 year**:
+```sql
 SELECT customer_name, order_item, total_cnt
 FROM(
 SELECT customer_name,
@@ -33,6 +58,7 @@ AND order_date >= CURRENT_DATE - INTERVAL '1 Year'
 GROUP BY customer_name, order_item
 ORDER BY total_cnt DESC)
 WHERE rn <= 5
+```sql
 
 #--Q2. Identify the time slots during which the most orders are placed. based on 2-hour intervals.
 
